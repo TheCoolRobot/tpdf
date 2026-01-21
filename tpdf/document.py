@@ -66,15 +66,24 @@ class TPDF:
         self.current_page = page
         return self
     
-    def add_text(self, content, x, y, **options):
+    def add_text(self, content, x=None, y=None, **options):
         """
         Add text to the document
         
         Args:
             content: Text content
-            x: X coordinate in points
+            x: X coordinate in points (None for alignment-based positioning)
             y: Y coordinate in points (from top)
-            **options: fontSize, fontFamily, color, fontWeight, fontStyle
+            **options: 
+                fontSize: Font size (default: 12)
+                fontFamily: 'Helvetica', 'Times', 'Courier' (default: 'Helvetica')
+                color: Hex color (default: '#000000')
+                fontWeight: 'normal' or 'bold' (default: 'normal')
+                fontStyle: 'normal' or 'italic' (default: 'normal')
+                align: 'left', 'center', 'right' (default: 'left')
+                valign: 'top', 'middle', 'bottom' (for vertical alignment)
+                maxWidth: Maximum width before wrapping (default: None)
+                lineHeight: Line height multiplier (default: 1.2)
         
         Returns:
             self (for chaining)
@@ -82,13 +91,17 @@ class TPDF:
         element = {
             'type': 'text',
             'content': str(content),
-            'x': float(x),
-            'y': float(y),
+            'x': float(x) if x is not None else None,
+            'y': float(y) if y is not None else None,
             'fontSize': options.get('fontSize', 12),
             'fontFamily': options.get('fontFamily', 'Helvetica'),
             'color': options.get('color', '#000000'),
             'fontWeight': options.get('fontWeight', 'normal'),
-            'fontStyle': options.get('fontStyle', 'normal')
+            'fontStyle': options.get('fontStyle', 'normal'),
+            'align': options.get('align', 'left'),
+            'valign': options.get('valign', None),
+            'maxWidth': options.get('maxWidth', None),
+            'lineHeight': options.get('lineHeight', 1.2)
         }
         
         if self.multipage:
@@ -103,16 +116,98 @@ class TPDF:
         
         return self
     
-    def add_image(self, url, x, y, width, height):
+    def add_paragraph(self, content, x, y, maxWidth, **options):
+        """
+        Add a paragraph with automatic text wrapping
+        
+        Args:
+            content: Paragraph text
+            x: X coordinate
+            y: Y coordinate (top of paragraph)
+            maxWidth: Maximum width for wrapping
+            **options: Same as add_text
+        
+        Returns:
+            self (for chaining)
+        """
+        options['maxWidth'] = maxWidth
+        return self.add_text(content, x, y, **options)
+    
+    def center(self, content, y, **options):
+        """
+        Add centered text (horizontal)
+        
+        Args:
+            content: Text content
+            y: Y coordinate
+            **options: Same as add_text
+        
+        Returns:
+            self (for chaining)
+        """
+        options['align'] = 'center'
+        return self.add_text(content, None, y, **options)
+    
+    def left(self, content, y, margin=50, **options):
+        """
+        Add left-aligned text
+        
+        Args:
+            content: Text content
+            y: Y coordinate
+            margin: Left margin (default: 50)
+            **options: Same as add_text
+        
+        Returns:
+            self (for chaining)
+        """
+        options['align'] = 'left'
+        return self.add_text(content, margin, y, **options)
+    
+    def right(self, content, y, margin=50, **options):
+        """
+        Add right-aligned text
+        
+        Args:
+            content: Text content
+            y: Y coordinate
+            margin: Right margin (default: 50)
+            **options: Same as add_text
+        
+        Returns:
+            self (for chaining)
+        """
+        options['align'] = 'right'
+        return self.add_text(content, None, y, **options)
+    
+    def vcenter(self, content, x=None, **options):
+        """
+        Add vertically centered text
+        
+        Args:
+            content: Text content
+            x: X coordinate (None for horizontal center too)
+            **options: Same as add_text
+        
+        Returns:
+            self (for chaining)
+        """
+        options['valign'] = 'middle'
+        if x is None:
+            options['align'] = 'center'
+        return self.add_text(content, x, None, **options)
+    
+    def add_image(self, url, x, y, width, height, **options):
         """
         Add image to the document
         
         Args:
             url: Image URL
-            x: X coordinate in points
+            x: X coordinate in points (None for alignment)
             y: Y coordinate in points (from top)
             width: Image width in points
             height: Image height in points
+            **options: align ('left', 'center', 'right')
         
         Returns:
             self (for chaining)
@@ -120,10 +215,11 @@ class TPDF:
         element = {
             'type': 'image',
             'url': str(url),
-            'x': float(x),
-            'y': float(y),
+            'x': float(x) if x is not None else None,
+            'y': float(y) if y is not None else None,
             'width': float(width),
-            'height': float(height)
+            'height': float(height),
+            'align': options.get('align', 'left')
         }
         
         if self.multipage:

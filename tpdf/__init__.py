@@ -3,7 +3,7 @@ TPDF - Text Portable Document Format
 AI-friendly PDF generation library
 """
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 __author__ = "TheCoolRobot"
 __license__ = "MIT"
 

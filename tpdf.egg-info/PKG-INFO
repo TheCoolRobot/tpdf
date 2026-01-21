@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: tpdf
-Version: 0.1.0
+Version: 0.2.0
 Summary: Text Portable Document Format - AI-friendly PDF generation
 Home-page: https://github.com/thecoolrobot/tpdf
 Author: Your Name
@@ -16,6 +16,7 @@ Classifier: Intended Audience :: Developers
 Classifier: Programming Language :: Python :: 3
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
+License-File: LICENSE
 Requires-Dist: reportlab>=4.0.0
 Requires-Dist: requests>=2.25.0
 Provides-Extra: dev
@@ -24,6 +25,7 @@ Requires-Dist: black>=22.0; extra == "dev"
 Requires-Dist: flake8>=4.0; extra == "dev"
 Dynamic: author
 Dynamic: home-page
+Dynamic: license-file
 Dynamic: requires-python
 
 # TPDF - Text Portable Document Format
@@ -212,7 +214,7 @@ Save as .tpdf JSON file.
 
 ## Examples
 
-See the [examples](https://github.com/yourusername/tpdf/tree/main/examples) directory for more use cases:
+See the [examples](https://github.com/thecoolrobot/tpdf/tree/main/examples) directory for more use cases:
 - Invoice generation
 - Certificate creation
 - Report templates

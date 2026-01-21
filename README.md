@@ -184,7 +184,7 @@ Save as .tpdf JSON file.
 
 ## Examples
 
-See the [examples](https://github.com/yourusername/tpdf/tree/main/examples) directory for more use cases:
+See the [examples](https://github.com/thecoolrobot/tpdf/tree/main/examples) directory for more use cases:
 - Invoice generation
 - Certificate creation
 - Report templates
